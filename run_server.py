@@ -56,7 +56,13 @@ def check_frontend_submodule(lang=None):
         lang = upgrade_manager.lang
 
     frontend_path = Path(__file__).parent / "frontend" / "index.html"
+    # On source branches, the built index.html doesn't exist yet — check for source instead
+    source_frontend_path = Path(__file__).parent / "frontend" / "src" / "renderer" / "index.html"
+
     if not frontend_path.exists():
+        if source_frontend_path.exists():
+            return  # Submodule is initialized (source branch) — skip
+
         if lang == "zh":
             logger.warning("未找到前端子模块，正在尝试初始化子模块...")
         else:

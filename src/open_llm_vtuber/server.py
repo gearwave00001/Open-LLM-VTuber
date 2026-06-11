@@ -142,9 +142,11 @@ class WebSocketServer:
         )
 
         # Mount main frontend last (as catch-all)
+        # Prefer built output (dist/web) if it exists, otherwise fall back to frontend/
+        frontend_dir = "frontend/dist/web" if os.path.isdir("frontend/dist/web") else "frontend"
         self.app.mount(
             "/",
-            CORSStaticFiles(directory="frontend", html=True),
+            CORSStaticFiles(directory=frontend_dir, html=True),
             name="frontend",
         )
 
